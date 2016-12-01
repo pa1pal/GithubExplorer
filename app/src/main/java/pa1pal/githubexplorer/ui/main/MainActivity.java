@@ -3,9 +3,11 @@ package pa1pal.githubexplorer.ui.main;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.*;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,7 +22,7 @@ import pa1pal.githubexplorer.data.DataManager;
 import pa1pal.githubexplorer.data.model.Users;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
 
-public class MainActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, MainContract.View, SwipeRefreshLayout.OnRefreshListener{
+public class MainActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, MainContract.View{
 
     @BindView(R.id.userslist)
     RecyclerView recyclerViewGrid;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         mainAdapter.setContext(this);
         dataManager = new DataManager();
         mainPresenter = new MainPresenter(dataManager, this);
+        mainPresenter.subscribe();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -79,11 +82,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onRefresh() {
-
     }
 
     @Override
@@ -129,6 +127,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void onItemClick(View childView, int position) {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mainPresenter.unsubscribe();
     }
 
     @Override
