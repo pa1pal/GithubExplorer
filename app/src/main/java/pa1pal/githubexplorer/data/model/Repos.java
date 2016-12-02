@@ -1,6 +1,5 @@
 package pa1pal.githubexplorer.data.model;
 
-import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

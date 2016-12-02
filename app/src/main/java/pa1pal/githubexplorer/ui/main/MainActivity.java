@@ -1,5 +1,6 @@
 package pa1pal.githubexplorer.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -23,6 +24,7 @@ import pa1pal.githubexplorer.R;
 import pa1pal.githubexplorer.data.DataManager;
 import pa1pal.githubexplorer.data.model.Search;
 import pa1pal.githubexplorer.data.model.Users;
+import pa1pal.githubexplorer.ui.repo.RepoActivity;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
 
 public class MainActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, MainContract.View {
@@ -34,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     private DataManager dataManager;
     private MainAdapter mainAdapter;
     private MainContract.Presenter mainPresenter;
-
-    View rootView;
     List<Users> list;
 
     @Override
@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -116,7 +115,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         recyclerViewGrid.setAdapter(mainAdapter);
     }
 
-
     @Override
     public void showError(String message) {
         Toast.makeText(this, "Error loading post", Toast.LENGTH_SHORT).show();
@@ -131,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void setUpAdapter(Search search) {
         mainAdapter.setUsers(search.getItems());
+        this.list = search.getItems();
     }
 
     @Override
@@ -140,7 +139,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
 
     @Override
     public void onItemClick(View childView, int position) {
-
+        Intent intent = new Intent(this, RepoActivity.class);
+        intent.putExtra("username", list.get(position).getLogin());
+        startActivity(intent);
     }
 
     @Override
