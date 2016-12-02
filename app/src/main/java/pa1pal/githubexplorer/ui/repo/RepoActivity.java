@@ -42,7 +42,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         dataManager = new DataManager();
         mainPresenter = new RepoPresenter(dataManager, this);
         username = getIntent().getStringExtra("username");
-        mainPresenter.subscribe(username);
+        mainPresenter.subscribe();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

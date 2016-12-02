@@ -49,8 +49,7 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void subscribe(String q) {
-        loadPost(q);
+    public void subscribe() {
     }
 
     @Override

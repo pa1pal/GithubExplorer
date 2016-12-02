@@ -1,15 +1,13 @@
-package pa1pal.githubexplorer.ui.main;
+package pa1pal.githubexplorer.ui.home;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,20 +20,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pa1pal.githubexplorer.R;
 import pa1pal.githubexplorer.data.DataManager;
-import pa1pal.githubexplorer.data.model.Search;
 import pa1pal.githubexplorer.data.model.Users;
+import pa1pal.githubexplorer.ui.main.MainActivity;
 import pa1pal.githubexplorer.ui.repo.RepoActivity;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
 
-public class MainActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, MainContract.View {
+public class HomeActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, HomeContract.View {
 
     @BindView(R.id.userslist)
     RecyclerView recyclerViewGrid;
-    String query;
-    private Users users;
     private DataManager dataManager;
-    private MainAdapter mainAdapter;
-    private MainContract.Presenter mainPresenter;
+    private HomeAdapter mainAdapter;
+    private HomeContract.Presenter mainPresenter;
     List<Users> list;
 
     @Override
@@ -43,10 +39,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        mainAdapter = new MainAdapter();
+        mainAdapter = new HomeAdapter();
         mainAdapter.setContext(this);
         dataManager = new DataManager();
-        mainPresenter = new MainPresenter(dataManager, this);
+        mainPresenter = new HomePresenter(dataManager, this);
         mainPresenter.subscribe();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -61,39 +57,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         });
 
         setUpRecyclerView();
-        mainPresenter.loadPost(query);
+        mainPresenter.loadLocalUsers();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        getMenuInflater().inflate(R.menu.home_menu, menu);
 
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String searchQuery) {
-                mainPresenter.loadPost(searchQuery);
-                return true;
-            }
-        });
         return true;
     }
 
@@ -101,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent searchIntent = new Intent(this, MainActivity.class);
+            startActivity(searchIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -127,13 +100,13 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     }
 
     @Override
-    public void setUpAdapter(Search search) {
-        mainAdapter.setUsers(search.getItems());
-        this.list = search.getItems();
+    public void setUpAdapter(List<Users> userses) {
+        mainAdapter.setUsers(userses);
+        this.list = userses;
     }
 
     @Override
-    public void setPresenter(MainContract.Presenter presenter) {
+    public void setPresenter(HomeContract.Presenter presenter) {
         mainPresenter = presenter;
     }
 

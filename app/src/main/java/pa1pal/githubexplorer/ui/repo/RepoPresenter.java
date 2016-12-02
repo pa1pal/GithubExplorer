@@ -51,9 +51,7 @@ public class RepoPresenter implements RepoContract.Presenter {
     }
 
     @Override
-    public void subscribe(String username) {
-        loadRepos(username);
-    }
+    public void subscribe() {    }
 
     @Override
     public void unsubscribe() {
