@@ -2,8 +2,11 @@ package pa1pal.githubexplorer.ui.main;
 
 import android.content.Context;
 
+import java.util.List;
+
 import pa1pal.githubexplorer.data.DataManager;
 import pa1pal.githubexplorer.data.model.Search;
+import pa1pal.githubexplorer.data.model.Users;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -42,10 +45,33 @@ public class MainPresenter implements MainContract.Presenter {
 
                     @Override
                     public void onNext(Search search) {
-                        view.setUpAdapter(search);
+                        view.setUpAdapter(search.getItems());
                     }
                 });
 
+    }
+
+    @Override
+    public void loadFromDatabase() {
+        subscription = dataManager.getLocalUsers()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<List<Users>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Users> userses) {
+                        view.setUpAdapter(userses);
+                    }
+                });
     }
 
     @Override

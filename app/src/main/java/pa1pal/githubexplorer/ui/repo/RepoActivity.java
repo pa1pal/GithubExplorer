@@ -17,6 +17,7 @@ import pa1pal.githubexplorer.R;
 import pa1pal.githubexplorer.data.DataManager;
 import pa1pal.githubexplorer.data.model.Repos;
 import pa1pal.githubexplorer.data.model.Users;
+import pa1pal.githubexplorer.utils.ItemOffsetDecoration;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
 
 public class RepoActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, RepoContract.View {
@@ -26,8 +27,8 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
     String username;
     private Users users;
     private DataManager dataManager;
-    private RepoAdapter mainAdapter;
-    private RepoContract.Presenter mainPresenter;
+    private RepoAdapter repoAdapter;
+    private RepoContract.Presenter repoPresenter;
 
     View rootView;
     List<Users> list;
@@ -37,17 +38,16 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repo);
         ButterKnife.bind(this);
-        mainAdapter = new RepoAdapter();
-        mainAdapter.setContext(this);
+        repoAdapter = new RepoAdapter();
+        repoAdapter.setContext(this);
         dataManager = new DataManager();
-        mainPresenter = new RepoPresenter(dataManager, this);
+        repoPresenter = new RepoPresenter(dataManager, this);
         username = getIntent().getStringExtra("username");
-        mainPresenter.subscribe();
+        repoPresenter.subscribe();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        setUpRecyclerView();
-        mainPresenter.loadRepos(username);
+       // setUpRecyclerView();
+        repoPresenter.loadRepos(username);
     }
 
     @Override
@@ -56,7 +56,10 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         repoRecyclerView.setLayoutManager(layoutManager);
         repoRecyclerView.addOnItemTouchListener(new RecyclerItemClickListner(getApplicationContext(), this));
         repoRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        repoRecyclerView.setAdapter(mainAdapter);
+        repoRecyclerView.setAdapter(repoAdapter);
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this,
+                R.dimen.item_offset);
+        repoRecyclerView.addItemDecoration(itemDecoration);
     }
 
 
@@ -73,12 +76,13 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
 
     @Override
     public void setUpAdapter(List<Repos> reposList) {
-        mainAdapter.setUsers(reposList);
+        repoAdapter.setUsers(reposList);
+        setUpRecyclerView();
     }
 
     @Override
     public void setPresenter(RepoContract.Presenter presenter) {
-        mainPresenter = presenter;
+        repoPresenter = presenter;
     }
 
     @Override
@@ -89,7 +93,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mainPresenter.unsubscribe();
+        repoPresenter.unsubscribe();
     }
 
     @Override

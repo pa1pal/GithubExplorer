@@ -1,16 +1,11 @@
 package pa1pal.githubexplorer.ui.main;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.*;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,15 +17,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pa1pal.githubexplorer.R;
 import pa1pal.githubexplorer.data.DataManager;
-import pa1pal.githubexplorer.data.model.Search;
 import pa1pal.githubexplorer.data.model.Users;
 import pa1pal.githubexplorer.ui.repo.RepoActivity;
+import pa1pal.githubexplorer.utils.ItemOffsetDecoration;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
 
 public class MainActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, MainContract.View {
 
     @BindView(R.id.userslist)
-    RecyclerView recyclerViewGrid;
+    RecyclerView usersList;
     String query;
     private Users users;
     private DataManager dataManager;
@@ -50,18 +45,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         mainPresenter.subscribe();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        setUpRecyclerView();
-        mainPresenter.loadPost(query);
+        handleIntent(getIntent());
+        mainPresenter.loadFromDatabase();
     }
 
     @Override
@@ -70,30 +55,12 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         getMenuInflater().inflate(R.menu.menu_main, menu);
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-
-            }
-        });
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String searchQuery) {
-                mainPresenter.loadPost(searchQuery);
-                return true;
-            }
-        });
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
         return true;
     }
 
@@ -109,10 +76,26 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void setUpRecyclerView() {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewGrid.setLayoutManager(layoutManager);
-        recyclerViewGrid.addOnItemTouchListener(new RecyclerItemClickListner(getApplicationContext(), this));
-        recyclerViewGrid.setItemAnimator(new DefaultItemAnimator());
-        recyclerViewGrid.setAdapter(mainAdapter);
+        usersList.setLayoutManager(layoutManager);
+        usersList.addOnItemTouchListener(new RecyclerItemClickListner(getApplicationContext(), this));
+        usersList.setItemAnimator(new DefaultItemAnimator());
+        usersList.setAdapter(mainAdapter);
+        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this,
+                R.dimen.item_offset);
+        usersList.addItemDecoration(itemDecoration);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            mainPresenter.loadPost(query);
+        }
     }
 
     @Override
@@ -127,9 +110,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     }
 
     @Override
-    public void setUpAdapter(Search search) {
-        mainAdapter.setUsers(search.getItems());
-        this.list = search.getItems();
+    public void setUpAdapter(List<Users> list) {
+        mainAdapter.setUsers(list);
+        setUpRecyclerView();
+        this.list = list;
     }
 
     @Override
@@ -156,4 +140,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mainPresenter.loadFromDatabase();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mainPresenter.loadFromDatabase();
+    }
 }
