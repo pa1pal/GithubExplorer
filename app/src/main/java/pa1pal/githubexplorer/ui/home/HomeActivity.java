@@ -31,7 +31,7 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemClick
     RecyclerView recyclerViewGrid;
     private DataManager dataManager;
     private HomeAdapter mainAdapter;
-    private HomeContract.Presenter mainPresenter;
+    private HomeContract.Presenter homePresenter;
     List<Users> list;
 
     @Override
@@ -42,8 +42,8 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemClick
         mainAdapter = new HomeAdapter();
         mainAdapter.setContext(this);
         dataManager = new DataManager();
-        mainPresenter = new HomePresenter(dataManager, this);
-        mainPresenter.subscribe();
+        homePresenter = new HomePresenter(dataManager, this);
+        homePresenter.subscribe();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -56,8 +56,7 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemClick
             }
         });
 
-        setUpRecyclerView();
-        mainPresenter.loadLocalUsers();
+        homePresenter.loadLocalUsers();
     }
 
     @Override
@@ -102,12 +101,13 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void setUpAdapter(List<Users> userses) {
         mainAdapter.setUsers(userses);
+        setUpRecyclerView();
         this.list = userses;
     }
 
     @Override
     public void setPresenter(HomeContract.Presenter presenter) {
-        mainPresenter = presenter;
+        homePresenter = presenter;
     }
 
     @Override
@@ -121,7 +121,7 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mainPresenter.unsubscribe();
+        homePresenter.unsubscribe();
     }
 
     @Override
@@ -129,4 +129,9 @@ public class HomeActivity extends AppCompatActivity implements RecyclerItemClick
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        homePresenter.loadLocalUsers();
+    }
 }
