@@ -1,8 +1,6 @@
 package pa1pal.githubexplorer.ui.main;
 
-import java.util.List;
-
-import pa1pal.githubexplorer.data.model.Users;
+import pa1pal.githubexplorer.data.model.Search;
 import pa1pal.githubexplorer.ui.base.BasePresenter;
 import pa1pal.githubexplorer.ui.base.BaseView;
 
@@ -15,7 +13,7 @@ public class MainContract {
         //void showPosts(List<Post> posts);
         void showComplete();
 
-        void setUpAdapter(List<Users> list);
+        void setUpAdapter(Search search);
         //void showProgressbar(boolean show);
     }
 

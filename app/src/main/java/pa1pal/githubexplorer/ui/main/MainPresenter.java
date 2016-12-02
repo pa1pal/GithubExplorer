@@ -2,10 +2,8 @@ package pa1pal.githubexplorer.ui.main;
 
 import android.content.Context;
 
-import java.util.List;
-
 import pa1pal.githubexplorer.data.DataManager;
-import pa1pal.githubexplorer.data.model.Users;
+import pa1pal.githubexplorer.data.model.Search;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -31,7 +29,7 @@ public class MainPresenter implements MainContract.Presenter {
         subscription = dataManager.getUsers()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<List<Users>>() {
+                .subscribe(new Observer<Search>() {
                     @Override
                     public void onCompleted() {
                        view.showComplete();
@@ -43,9 +41,10 @@ public class MainPresenter implements MainContract.Presenter {
                     }
 
                     @Override
-                    public void onNext(List<Users> events) {
-                        view.setUpAdapter(events);
+                    public void onNext(Search search) {
+                        view.setUpAdapter(search);
                     }
+
                 });
 
     }

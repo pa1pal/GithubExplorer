@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import javax.annotation.Generated;
 
+@Generated("org.jsonschema2pojo")
 public class Users {
 
     @SerializedName("login")
@@ -58,45 +59,9 @@ public class Users {
     @SerializedName("site_admin")
     @Expose
     private Boolean siteAdmin;
-    @SerializedName("name")
+    @SerializedName("score")
     @Expose
-    private String name;
-    @SerializedName("company")
-    @Expose
-    private String company;
-    @SerializedName("blog")
-    @Expose
-    private Object blog;
-    @SerializedName("location")
-    @Expose
-    private String location;
-    @SerializedName("email")
-    @Expose
-    private String email;
-    @SerializedName("hireable")
-    @Expose
-    private Boolean hireable;
-    @SerializedName("bio")
-    @Expose
-    private Object bio;
-    @SerializedName("public_repos")
-    @Expose
-    private Integer publicRepos;
-    @SerializedName("public_gists")
-    @Expose
-    private Integer publicGists;
-    @SerializedName("followers")
-    @Expose
-    private Integer followers;
-    @SerializedName("following")
-    @Expose
-    private Integer following;
-    @SerializedName("created_at")
-    @Expose
-    private String createdAt;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
+    private Double score;
 
     /**
      *
@@ -407,235 +372,19 @@ public class Users {
     /**
      *
      * @return
-     * The name
+     * The score
      */
-    public String getName() {
-        return name;
+    public Double getScore() {
+        return score;
     }
 
     /**
      *
-     * @param name
-     * The name
+     * @param score
+     * The score
      */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     *
-     * @return
-     * The company
-     */
-    public String getCompany() {
-        return company;
-    }
-
-    /**
-     *
-     * @param company
-     * The company
-     */
-    public void setCompany(String company) {
-        this.company = company;
-    }
-
-    /**
-     *
-     * @return
-     * The blog
-     */
-    public Object getBlog() {
-        return blog;
-    }
-
-    /**
-     *
-     * @param blog
-     * The blog
-     */
-    public void setBlog(Object blog) {
-        this.blog = blog;
-    }
-
-    /**
-     *
-     * @return
-     * The location
-     */
-    public String getLocation() {
-        return location;
-    }
-
-    /**
-     *
-     * @param location
-     * The location
-     */
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    /**
-     *
-     * @return
-     * The email
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
-     *
-     * @param email
-     * The email
-     */
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    /**
-     *
-     * @return
-     * The hireable
-     */
-    public Boolean getHireable() {
-        return hireable;
-    }
-
-    /**
-     *
-     * @param hireable
-     * The hireable
-     */
-    public void setHireable(Boolean hireable) {
-        this.hireable = hireable;
-    }
-
-    /**
-     *
-     * @return
-     * The bio
-     */
-    public Object getBio() {
-        return bio;
-    }
-
-    /**
-     *
-     * @param bio
-     * The bio
-     */
-    public void setBio(Object bio) {
-        this.bio = bio;
-    }
-
-    /**
-     *
-     * @return
-     * The publicRepos
-     */
-    public Integer getPublicRepos() {
-        return publicRepos;
-    }
-
-    /**
-     *
-     * @param publicRepos
-     * The public_repos
-     */
-    public void setPublicRepos(Integer publicRepos) {
-        this.publicRepos = publicRepos;
-    }
-
-    /**
-     *
-     * @return
-     * The publicGists
-     */
-    public Integer getPublicGists() {
-        return publicGists;
-    }
-
-    /**
-     *
-     * @param publicGists
-     * The public_gists
-     */
-    public void setPublicGists(Integer publicGists) {
-        this.publicGists = publicGists;
-    }
-
-    /**
-     *
-     * @return
-     * The followers
-     */
-    public Integer getFollowers() {
-        return followers;
-    }
-
-    /**
-     *
-     * @param followers
-     * The followers
-     */
-    public void setFollowers(Integer followers) {
-        this.followers = followers;
-    }
-
-    /**
-     *
-     * @return
-     * The following
-     */
-    public Integer getFollowing() {
-        return following;
-    }
-
-    /**
-     *
-     * @param following
-     * The following
-     */
-    public void setFollowing(Integer following) {
-        this.following = following;
-    }
-
-    /**
-     *
-     * @return
-     * The createdAt
-     */
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     *
-     * @param createdAt
-     * The created_at
-     */
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    /**
-     *
-     * @return
-     * The updatedAt
-     */
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    /**
-     *
-     * @param updatedAt
-     * The updated_at
-     */
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setScore(Double score) {
+        this.score = score;
     }
 
 }

@@ -16,15 +16,18 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pa1pal.githubexplorer.R;
+import pa1pal.githubexplorer.data.model.Search;
 import pa1pal.githubexplorer.data.model.Users;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private List<Users> list;
+    private Search search;
     Context context;
 
     public MainAdapter(){
         list = new ArrayList<>();
+        search = new Search();
     }
 
     @Override
@@ -37,7 +40,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //holder.title.setText(list.get(position).getTitle());
-        holder.author.setText("by "+list.get(position).getName());
+        holder.author.setText("by "+list.get(position).getLogin());
 
         Picasso.with(context)
                 .load(list.get(position).getAvatarUrl())
@@ -45,7 +48,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
                 .centerCrop()
                 .into(holder.userImage);
 
-//
 //        imageLoader = ImageLoaderHelper.getInstance(holder.itemView.getContext()).getImageLoader();
 //        holder.newsImage.setImageUrl(list.get(position).getThumb(), imageLoader);
 //        holder.newsImage.setAspectRatio(list.get(position).getAspectRatio());
@@ -59,7 +61,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return search.getItems().size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

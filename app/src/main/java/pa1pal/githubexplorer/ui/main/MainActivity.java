@@ -3,6 +3,7 @@ package pa1pal.githubexplorer.ui.main;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,13 +20,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pa1pal.githubexplorer.R;
 import pa1pal.githubexplorer.data.DataManager;
+import pa1pal.githubexplorer.data.model.Search;
 import pa1pal.githubexplorer.data.model.Users;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
 
-public class MainActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, MainContract.View{
+public class MainActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, MainContract.View,  SwipeRefreshLayout.OnRefreshListener{
 
     @BindView(R.id.userslist)
     RecyclerView recyclerViewGrid;
+
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     public static final int GRID_LAYOUT_COUNT = 2;
     private Users users;
@@ -41,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
         mainAdapter = new MainAdapter();
         mainAdapter.setContext(this);
         dataManager = new DataManager();
@@ -111,12 +117,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     public void showComplete() {
         Toast.makeText(this, "Completed loading", Toast.LENGTH_SHORT).show();
 
+        if (swipeRefreshLayout != null)
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
     }
 
     @Override
-    public void setUpAdapter(List<Users> list) {
-        mainAdapter.setUsers(list);
-        this.list = list;
+    public void setUpAdapter(Search search) {
+        mainAdapter.setUsers(search.getItems());
+        this.list = search.getItems();
     }
 
     @Override
@@ -138,5 +151,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void onItemLongPress(View childView, int position) {
 
+    }
+
+    @Override
+    public void onRefresh() {
+        mainPresenter.loadPost();
     }
 }
