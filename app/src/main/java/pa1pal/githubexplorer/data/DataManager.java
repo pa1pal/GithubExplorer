@@ -12,8 +12,8 @@ public class DataManager {
         apiManager=new ApiManager();
     }
 
-    public Observable<Search> getUsers() {
-        return apiManager.getGithubApi().getUsers();
+    public Observable<Search> getUsers(String query) {
+        return apiManager.getGithubApi().getUsers(query);
     }
 }
 

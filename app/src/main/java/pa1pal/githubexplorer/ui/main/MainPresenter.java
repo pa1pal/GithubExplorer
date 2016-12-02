@@ -25,8 +25,8 @@ public class MainPresenter implements MainContract.Presenter {
     }
 
     @Override
-    public void loadPost() {
-        subscription = dataManager.getUsers()
+    public void loadPost(String q) {
+        subscription = dataManager.getUsers(q)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<Search>() {
@@ -44,14 +44,13 @@ public class MainPresenter implements MainContract.Presenter {
                     public void onNext(Search search) {
                         view.setUpAdapter(search);
                     }
-
                 });
 
     }
 
     @Override
-    public void subscribe() {
-        loadPost();
+    public void subscribe(String q) {
+        loadPost(q);
     }
 
     @Override

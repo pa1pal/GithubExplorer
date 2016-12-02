@@ -3,11 +3,12 @@ package pa1pal.githubexplorer.ui.main;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,15 +25,11 @@ import pa1pal.githubexplorer.data.model.Search;
 import pa1pal.githubexplorer.data.model.Users;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
 
-public class MainActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, MainContract.View,  SwipeRefreshLayout.OnRefreshListener{
+public class MainActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, MainContract.View {
 
     @BindView(R.id.userslist)
     RecyclerView recyclerViewGrid;
-
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefreshLayout;
-
-    public static final int GRID_LAYOUT_COUNT = 2;
+    String query;
     private Users users;
     private DataManager dataManager;
     private MainAdapter mainAdapter;
@@ -46,12 +43,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        swipeRefreshLayout.setOnRefreshListener(this);
         mainAdapter = new MainAdapter();
         mainAdapter.setContext(this);
         dataManager = new DataManager();
         mainPresenter = new MainPresenter(dataManager, this);
-        mainPresenter.subscribe();
+        mainPresenter.subscribe(query);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -65,28 +61,49 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         });
 
         setUpRecyclerView();
-        mainPresenter.loadPost();
+        mainPresenter.loadPost(query);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        // Inflate the menu; this adds items to the action bar if it is present.
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+            }
+        });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String searchQuery) {
+                mainPresenter.loadPost(searchQuery);
+                return true;
+            }
+        });
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -96,16 +113,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         recyclerViewGrid.setLayoutManager(layoutManager);
         recyclerViewGrid.addOnItemTouchListener(new RecyclerItemClickListner(getApplicationContext(), this));
         recyclerViewGrid.setItemAnimator(new DefaultItemAnimator());
-//        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getApplicationContext(),
-//                R.dimen.item_offset);
-        //recyclerViewGrid.addItemDecoration(itemDecoration);
-        //Setting the Equal column spacing
-//        ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getActivity(),
-//                R.dimen.item_offset);
-//        recyclerViewGrid.addItemDecoration(itemDecoration);
-
         recyclerViewGrid.setAdapter(mainAdapter);
     }
+
 
     @Override
     public void showError(String message) {
@@ -116,20 +126,11 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void showComplete() {
         Toast.makeText(this, "Completed loading", Toast.LENGTH_SHORT).show();
-
-        if (swipeRefreshLayout != null)
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
     }
 
     @Override
     public void setUpAdapter(Search search) {
         mainAdapter.setUsers(search.getItems());
-        this.list = search.getItems();
     }
 
     @Override
@@ -153,8 +154,4 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
 
     }
 
-    @Override
-    public void onRefresh() {
-        mainPresenter.loadPost();
-    }
 }
