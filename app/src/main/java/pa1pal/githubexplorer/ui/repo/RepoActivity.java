@@ -22,12 +22,14 @@ import pa1pal.githubexplorer.data.model.Users;
 import pa1pal.githubexplorer.utils.EndlessRecyclerViewScrollListener;
 import pa1pal.githubexplorer.utils.ItemOffsetDecoration;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
+import pa1pal.githubexplorer.utils.Utils;
 
 public class RepoActivity extends AppCompatActivity implements RecyclerItemClickListner.OnItemClickListener, RepoContract.View {
 
     @BindView(R.id.repolist)
     RecyclerView repoRecyclerView;
     String username;
+    int ownerId;
     private Users users;
     private DataManager dataManager;
     private RepoAdapter repoAdapter;
@@ -35,7 +37,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
     private ProgressDialog progressDialog;
 
     View rootView;
-    List<Repos> list;
+    List<Repos> repositoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,21 +45,28 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         setContentView(R.layout.activity_repo);
         ButterKnife.bind(this);
         repoAdapter = new RepoAdapter();
-        list = new ArrayList<>();
+        repositoryList = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
         repoAdapter.setContext(this);
         dataManager = new DataManager();
         repoPresenter = new RepoPresenter(dataManager, this);
         username = getIntent().getStringExtra(getString(R.string.username));
+        ownerId = getIntent().getIntExtra("ownerId", 1);
         repoPresenter.subscribe();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setUpRecyclerView();
-        repoPresenter.loadRepos(username,1);
+
+        if (Utils.isConnected(this)) {
+            repoPresenter.loadRepos(username, 1, ownerId);
+        } else {
+            repoPresenter.loadLocalRepos(ownerId);
+            repoRecyclerView.clearOnScrollListeners();
+        }
+
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage(getString(R.string.loadingrepositories));
         progressDialog.show();
-
     }
 
     @Override
@@ -73,7 +82,9 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         repoRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                repoPresenter.loadRepos(username, ++page);
+                if (Utils.isConnected(RepoActivity.this)) {
+                    repoPresenter.loadRepos(username, ++page, ownerId);
+                }
                 Toast.makeText(RepoActivity.this, R.string.loading_more_repositories, Toast.LENGTH_SHORT).show();
             }
         });
@@ -93,7 +104,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
 
     @Override
     public void setUpAdapter(List<Repos> reposList) {
-        this.list.addAll(reposList);
+        this.repositoryList.addAll(reposList);
         repoAdapter.setRepositories(reposList);
     }
 

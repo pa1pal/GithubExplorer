@@ -9,6 +9,7 @@ import pa1pal.githubexplorer.data.model.Repos;
 import rx.Observer;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class RepoPresenter implements RepoContract.Presenter {
@@ -27,8 +28,8 @@ public class RepoPresenter implements RepoContract.Presenter {
     }
 
     @Override
-    public void loadRepos(String username, Integer page) {
-        subscription = dataManager.getRepos(username, page)
+    public void loadRepos(String username, Integer page, int ownerId) {
+        subscription = dataManager.getRepos(username, page, ownerId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<List<Repos>>() {
@@ -48,6 +49,20 @@ public class RepoPresenter implements RepoContract.Presenter {
                     }
                 });
 
+    }
+
+    @Override
+    public void loadLocalRepos(int ownerId) {
+        subscription = dataManager.getLocalRepos(ownerId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Action1<List<Repos>>() {
+                    @Override
+                    public void call(List<Repos> reposes) {
+                        view.showComplete();
+                        view.setUpAdapter(reposes);
+                    }
+                });
     }
 
     @Override

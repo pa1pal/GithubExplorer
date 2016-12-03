@@ -150,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     public void onItemClick(View childView, int position) {
         Intent intent = new Intent(this, RepoActivity.class);
         intent.putExtra("username", list.get(position).getLogin());
+        intent.putExtra("ownerId", list.get(position).getId());
         list.get(position).save();
         startActivity(intent);
     }
