@@ -10,13 +10,17 @@ public class RepoContract {
     interface View extends BaseView<Presenter> {
 
         void setUpRecyclerView();
+
         void showError(String message);
+
         void showComplete();
+
         void setUpAdapter(List<Repos> reposList);
     }
 
     interface Presenter extends BasePresenter {
         void loadRepos(String username, Integer page, int ownerId);
+
         void loadLocalRepos(int ownerId);
 
     }

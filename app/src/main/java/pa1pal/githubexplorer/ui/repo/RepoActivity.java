@@ -18,7 +18,6 @@ import butterknife.ButterKnife;
 import pa1pal.githubexplorer.R;
 import pa1pal.githubexplorer.data.DataManager;
 import pa1pal.githubexplorer.data.model.Repos;
-import pa1pal.githubexplorer.data.model.Users;
 import pa1pal.githubexplorer.utils.EndlessRecyclerViewScrollListener;
 import pa1pal.githubexplorer.utils.ItemOffsetDecoration;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
@@ -28,15 +27,19 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
 
     @BindView(R.id.repolist)
     RecyclerView repoRecyclerView;
+
     String username;
+
     int ownerId;
-    private Users users;
+
     private DataManager dataManager;
+
     private RepoAdapter repoAdapter;
+
     private RepoContract.Presenter repoPresenter;
+
     private ProgressDialog progressDialog;
 
-    View rootView;
     List<Repos> repositoryList;
 
     @Override

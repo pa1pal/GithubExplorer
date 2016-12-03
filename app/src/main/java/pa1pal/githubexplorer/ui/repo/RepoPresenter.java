@@ -15,10 +15,15 @@ import rx.schedulers.Schedulers;
 public class RepoPresenter implements RepoContract.Presenter {
 
     private static final String TAG = RepoPresenter.class.getSimpleName();
+
     private Subscription subscription;
+
     private RepoContract.View view;
+
     private DataManager dataManager;
+
     private RepoAdapter mainAdapter;
+
     private Context context;
 
     public RepoPresenter(DataManager dataManager, RepoContract.View view) {
@@ -66,7 +71,8 @@ public class RepoPresenter implements RepoContract.Presenter {
     }
 
     @Override
-    public void subscribe() {    }
+    public void subscribe() {
+    }
 
     @Override
     public void unsubscribe() {

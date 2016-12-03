@@ -31,10 +31,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     @BindView(R.id.userslist)
     RecyclerView usersList;
 
-    String query;
-
-    private Users users;
-
     private DataManager dataManager;
 
     private MainAdapter mainAdapter;
@@ -72,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =

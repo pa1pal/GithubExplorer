@@ -1,7 +1,5 @@
 package pa1pal.githubexplorer.ui.main;
 
-import android.content.Context;
-
 import java.util.List;
 
 import pa1pal.githubexplorer.data.DataManager;
@@ -15,13 +13,14 @@ import rx.schedulers.Schedulers;
 public class MainPresenter implements MainContract.Presenter {
 
     private static final String TAG = MainPresenter.class.getSimpleName();
-    private Subscription subscription;
-    private MainContract.View view;
-    private DataManager dataManager;
-    private MainAdapter mainAdapter;
-    private Context context;
 
-    public MainPresenter(DataManager dataManager, MainContract.View view){
+    private Subscription subscription;
+
+    private MainContract.View view;
+
+    private DataManager dataManager;
+
+    public MainPresenter(DataManager dataManager, MainContract.View view) {
         this.dataManager = dataManager;
         this.view = view;
         view.setPresenter(this);
@@ -35,7 +34,7 @@ public class MainPresenter implements MainContract.Presenter {
                 .subscribe(new Observer<Search>() {
                     @Override
                     public void onCompleted() {
-                       view.showComplete();
+                        view.showComplete();
                     }
 
                     @Override
@@ -81,7 +80,7 @@ public class MainPresenter implements MainContract.Presenter {
 
     @Override
     public void unsubscribe() {
-        if (subscription != null && subscription.isUnsubscribed()){
+        if (subscription != null && subscription.isUnsubscribed()) {
             subscription.unsubscribe();
         }
     }

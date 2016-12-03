@@ -19,9 +19,10 @@ import pa1pal.githubexplorer.data.model.Repos;
 public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
 
     private List<Repos> list;
+
     Context context;
 
-    public RepoAdapter(){
+    public RepoAdapter() {
         list = new ArrayList<>();
     }
 
@@ -37,8 +38,8 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.repo_name.setText(list.get(position).getName());
         holder.repo_desc.setText(list.get(position).getDescription());
-        holder.stargazersCount.setText(""+list.get(position).getStargazersCount());
-        holder.forksCount.setText(""+list.get(position).getForksCount());
+        holder.stargazersCount.setText("" + list.get(position).getStargazersCount());
+        holder.forksCount.setText("" + list.get(position).getForksCount());
     }
 
     public void setRepositories(List<Repos> reposes) {
@@ -70,7 +71,7 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
         }
     }
 
-    public void setContext(Context context){
+    public void setContext(Context context) {
         this.context = context;
     }
 }

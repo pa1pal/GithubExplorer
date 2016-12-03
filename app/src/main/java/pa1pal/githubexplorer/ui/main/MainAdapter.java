@@ -21,9 +21,10 @@ import pa1pal.githubexplorer.data.model.Users;
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private List<Users> list;
+
     Context context;
 
-    public MainAdapter(){
+    public MainAdapter() {
         list = new ArrayList<>();
     }
 
@@ -69,7 +70,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         }
     }
 
-    public void setContext(Context context){
+    public void setContext(Context context) {
         this.context = context;
     }
 }

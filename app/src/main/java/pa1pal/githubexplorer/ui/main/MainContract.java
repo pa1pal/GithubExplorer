@@ -10,8 +10,11 @@ public class MainContract {
     interface View extends BaseView<Presenter> {
 
         void setUpRecyclerView();
+
         void showError(String message);
+
         void showComplete();
+
         void setUpAdapter(List<Users> search);
     }
 
