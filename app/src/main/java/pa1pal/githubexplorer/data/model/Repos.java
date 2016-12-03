@@ -19,6 +19,28 @@ public class Repos {
     @SerializedName("description")
     private String description;
 
+    @SerializedName("stargazers_count")
+    private Integer stargazersCount;
+
+    @SerializedName("forks_count")
+    private Integer forksCount;
+
+    public Integer getStargazersCount() {
+        return stargazersCount;
+    }
+
+    public void setStargazersCount(Integer stargazersCount) {
+        this.stargazersCount = stargazersCount;
+    }
+
+    public Integer getForksCount() {
+        return forksCount;
+    }
+
+    public void setForksCount(Integer forksCount) {
+        this.forksCount = forksCount;
+    }
+
     public Integer getId() {
         return id;
     }

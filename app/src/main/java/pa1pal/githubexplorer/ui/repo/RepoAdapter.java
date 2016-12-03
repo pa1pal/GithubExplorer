@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,9 +36,10 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        //holder.title.setText(list.get(position).getTitle());
         holder.repo_name.setText(list.get(position).getName());
         holder.repo_desc.setText(list.get(position).getDescription());
+        holder.stargazersCount.setText(""+list.get(position).getStargazersCount());
+        holder.forksCount.setText(""+list.get(position).getForksCount());
     }
 
     public void setUsers(List<Repos> reposes) {
@@ -56,6 +58,18 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
 
         @BindView(R.id.repository_description)
         TextView repo_desc;
+
+        @BindView(R.id.star_image)
+        ImageView starImage;
+
+        @BindView(R.id.fork_image)
+        ImageView forkImage;
+
+        @BindView(R.id.stargazers_count)
+        TextView stargazersCount;
+
+        @BindView(R.id.forks_count)
+        TextView forksCount;
 
         public ViewHolder(View v) {
             super(v);
