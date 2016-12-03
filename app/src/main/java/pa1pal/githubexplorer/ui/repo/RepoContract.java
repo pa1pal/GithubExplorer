@@ -16,7 +16,7 @@ public class RepoContract {
     }
 
     interface Presenter extends BasePresenter {
-        void loadRepos(String username);
+        void loadRepos(String username, Integer page);
 
     }
 }

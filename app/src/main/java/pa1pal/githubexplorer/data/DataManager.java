@@ -24,8 +24,8 @@ public class DataManager {
         return apiManager.getGithubApi().getUsers(query);
     }
 
-    public Observable<List<Repos>> getRepos(String username) {
-        return apiManager.getGithubApi().getRepos(username);
+    public Observable<List<Repos>> getRepos(String username, Integer page) {
+        return apiManager.getGithubApi().getRepos(username, page);
     }
 
     public Observable<List<Users>> getLocalUsers(){

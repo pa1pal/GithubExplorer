@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -18,6 +19,7 @@ import pa1pal.githubexplorer.R;
 import pa1pal.githubexplorer.data.DataManager;
 import pa1pal.githubexplorer.data.model.Repos;
 import pa1pal.githubexplorer.data.model.Users;
+import pa1pal.githubexplorer.utils.EndlessRecyclerViewScrollListener;
 import pa1pal.githubexplorer.utils.ItemOffsetDecoration;
 import pa1pal.githubexplorer.utils.RecyclerItemClickListner;
 
@@ -41,16 +43,17 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         setContentView(R.layout.activity_repo);
         ButterKnife.bind(this);
         repoAdapter = new RepoAdapter();
+        list = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
         repoAdapter.setContext(this);
         dataManager = new DataManager();
         repoPresenter = new RepoPresenter(dataManager, this);
-        username = getIntent().getStringExtra("username");
+        username = getIntent().getStringExtra(getString(R.string.username));
         repoPresenter.subscribe();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setUpRecyclerView();
-        repoPresenter.loadRepos(username);
+        repoPresenter.loadRepos(username,1);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage(getString(R.string.loadingrepositories));
         progressDialog.show();
@@ -67,25 +70,31 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(this,
                 R.dimen.item_offset);
         repoRecyclerView.addItemDecoration(itemDecoration);
+        repoRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                repoPresenter.loadRepos(username, ++page);
+                Toast.makeText(RepoActivity.this, R.string.loading_more_repositories, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
     @Override
     public void showError(String message) {
-        Toast.makeText(this, "Error loading post", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, R.string.error_loading_repositories, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showComplete() {
-        Toast.makeText(this, "Completed loading", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.complete_loading, Toast.LENGTH_SHORT).show();
         progressDialog.dismiss();
     }
 
     @Override
     public void setUpAdapter(List<Repos> reposList) {
-        repoAdapter.setUsers(reposList);
-        this.list = reposList;
+        this.list.addAll(reposList);
+        repoAdapter.setRepositories(reposList);
     }
 
     @Override

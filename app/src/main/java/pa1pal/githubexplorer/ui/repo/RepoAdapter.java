@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -42,8 +41,8 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
         holder.forksCount.setText(""+list.get(position).getForksCount());
     }
 
-    public void setUsers(List<Repos> reposes) {
-        list = reposes;
+    public void setRepositories(List<Repos> reposes) {
+        list.addAll(reposes);
         notifyDataSetChanged();
     }
 
@@ -58,12 +57,6 @@ public class RepoAdapter extends RecyclerView.Adapter<RepoAdapter.ViewHolder> {
 
         @BindView(R.id.repository_description)
         TextView repo_desc;
-
-        @BindView(R.id.star_image)
-        ImageView starImage;
-
-        @BindView(R.id.fork_image)
-        ImageView forkImage;
 
         @BindView(R.id.stargazers_count)
         TextView stargazersCount;

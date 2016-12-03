@@ -70,6 +70,7 @@ public class MainPresenter implements MainContract.Presenter {
                     @Override
                     public void onNext(List<Users> userses) {
                         view.setUpAdapter(userses);
+
                     }
                 });
     }

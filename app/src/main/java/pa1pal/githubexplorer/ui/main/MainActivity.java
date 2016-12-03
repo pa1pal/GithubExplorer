@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -29,12 +30,19 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
 
     @BindView(R.id.userslist)
     RecyclerView usersList;
+
     String query;
+
     private Users users;
+
     private DataManager dataManager;
+
     private MainAdapter mainAdapter;
+
     private MainContract.Presenter mainPresenter;
+
     List<Users> list;
+
     private ProgressDialog progress;
 
     @Override
@@ -43,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         mainAdapter = new MainAdapter();
+        list = new ArrayList<>();
         progress = new ProgressDialog(this);
         mainAdapter.setContext(this);
         dataManager = new DataManager();
@@ -54,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         setUpRecyclerView();
         mainPresenter.loadFromDatabase();
 
-        if (!isConnected()){
-            Toast.makeText(this, "No Internet connection", Toast.LENGTH_SHORT).show();
+        if (!isConnected()) {
+            Toast.makeText(this, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -113,18 +122,21 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
 
     @Override
     public void showError(String message) {
-        Toast.makeText(this, "Error loading post", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.error_loading_users, Toast.LENGTH_SHORT).show();
 
     }
 
     @Override
     public void showComplete() {
-        Toast.makeText(this, "Completed loading", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.complete_loading, Toast.LENGTH_SHORT).show();
         progress.dismiss();
     }
 
     @Override
     public void setUpAdapter(List<Users> list) {
+        if (list.isEmpty()) {
+            Toast.makeText(this, R.string.no_user_in_database, Toast.LENGTH_SHORT).show();
+        }
         mainAdapter.setUsers(list);
         this.list = list;
     }
@@ -166,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     }
 
     public boolean isConnected() {
-        ConnectivityManager connectivityManager = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         if (activeNetworkInfo != null)
             return activeNetworkInfo.isConnected();

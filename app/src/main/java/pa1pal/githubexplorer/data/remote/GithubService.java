@@ -14,6 +14,6 @@ public interface GithubService {
     Observable<Search> getUsers(@Query("q") String query);
 
     @GET("users/{username}/repos")
-    Observable<List<Repos>> getRepos(@Path("username") String username);
+    Observable<List<Repos>> getRepos(@Path("username") String username, @Query("page") Integer page);
 
 }

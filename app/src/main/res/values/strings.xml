@@ -5,4 +5,11 @@
     <string name="loadingdatabase">Loading previous visited users</string>
     <string name="loadingsearch">searching ...</string>
     <string name="loadingrepositories">Loading Repositories ...</string>
+    <string name="error_loading_users">Error loading Users</string>
+    <string name="error_loading_repositories">Error loading repositories</string>
+    <string name="complete_loading">Completed loading</string>
+    <string name="no_user_in_database">No user in database</string>
+    <string name="no_internet_connection">No Internet connection</string>
+    <string name="username">username</string>
+    <string name="loading_more_repositories">Loading more repositories...</string>
 </resources>

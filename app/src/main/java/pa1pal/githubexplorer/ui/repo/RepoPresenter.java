@@ -27,8 +27,8 @@ public class RepoPresenter implements RepoContract.Presenter {
     }
 
     @Override
-    public void loadRepos(String username) {
-        subscription = dataManager.getRepos(username)
+    public void loadRepos(String username, Integer page) {
+        subscription = dataManager.getRepos(username, page)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<List<Repos>>() {
