@@ -31,7 +31,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
     private RepoContract.Presenter repoPresenter;
 
     View rootView;
-    List<Users> list;
+    List<Repos> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         repoPresenter.subscribe();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       // setUpRecyclerView();
+        setUpRecyclerView();
         repoPresenter.loadRepos(username);
     }
 
@@ -77,7 +77,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void setUpAdapter(List<Repos> reposList) {
         repoAdapter.setUsers(reposList);
-        setUpRecyclerView();
+        this.list = reposList;
     }
 
     @Override

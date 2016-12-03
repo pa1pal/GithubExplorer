@@ -1,40 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cv"
+    style="@style/card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:elevation="@dimen/card_elevation">
+    android:layout_height="match_parent">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:orientation="horizontal"
-        android:padding="10dip">
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/user_gravatar"
-            android:layout_width="32dip"
-            android:layout_height="32dip"
+            android:scaleType="fitCenter"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center_vertical"
-            android:background="@mipmap/ic_launcher"
-            android:padding="2dip" />
+            android:padding="4dp"
+            android:layout_weight="1"/>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
+        <TextView
+            android:id="@+id/user_login"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingLeft="5dip">
-
-            <TextView
-                android:id="@+id/user_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:textSize="15dip" />
-        </LinearLayout>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:paddingTop="@dimen/margin_default_tb"
+            android:paddingEnd="@dimen/margin_default"
+            android:paddingStart="@dimen/margin_default"
+            android:paddingBottom="@dimen/margin_default_tb"
+            android:layout_weight="4"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>

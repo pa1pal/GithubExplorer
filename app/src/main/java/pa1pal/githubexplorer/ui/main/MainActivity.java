@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         handleIntent(getIntent());
+        setUpRecyclerView();
         mainPresenter.loadFromDatabase();
     }
 
@@ -112,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void setUpAdapter(List<Users> list) {
         mainAdapter.setUsers(list);
-        setUpRecyclerView();
         this.list = list;
     }
 

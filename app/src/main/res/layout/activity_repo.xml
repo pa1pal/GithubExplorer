@@ -7,6 +7,14 @@
     android:fitsSystemWindows="true"
     tools:context="pa1pal.githubexplorer.ui.repo.RepoActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/repolist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        />
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,15 +25,10 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            android:padding="4dp"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/repolist"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="1"
-        />
+
 </android.support.design.widget.CoordinatorLayout>
