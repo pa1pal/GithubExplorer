@@ -7,12 +7,7 @@
     android:fitsSystemWindows="true"
     tools:context="pa1pal.githubexplorer.ui.main.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/userslist"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        />
+
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -27,5 +22,12 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/userslist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior = "@string/appbar_scrolling_view_behavior"
+        />
 
 </android.support.design.widget.CoordinatorLayout>

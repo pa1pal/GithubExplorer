@@ -1,5 +1,6 @@
 package pa1pal.githubexplorer.ui.repo;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -29,6 +30,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
     private DataManager dataManager;
     private RepoAdapter repoAdapter;
     private RepoContract.Presenter repoPresenter;
+    private ProgressDialog progressDialog;
 
     View rootView;
     List<Repos> list;
@@ -39,6 +41,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         setContentView(R.layout.activity_repo);
         ButterKnife.bind(this);
         repoAdapter = new RepoAdapter();
+        progressDialog = new ProgressDialog(this);
         repoAdapter.setContext(this);
         dataManager = new DataManager();
         repoPresenter = new RepoPresenter(dataManager, this);
@@ -48,6 +51,10 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
         setSupportActionBar(toolbar);
         setUpRecyclerView();
         repoPresenter.loadRepos(username);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage(getString(R.string.loadingrepositories));
+        progressDialog.show();
+
     }
 
     @Override
@@ -72,6 +79,7 @@ public class RepoActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void showComplete() {
         Toast.makeText(this, "Completed loading", Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
     }
 
     @Override

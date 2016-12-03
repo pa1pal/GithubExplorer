@@ -1,8 +1,11 @@
 package pa1pal.githubexplorer.ui.main;
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.*;
@@ -32,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     private MainAdapter mainAdapter;
     private MainContract.Presenter mainPresenter;
     List<Users> list;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         mainAdapter = new MainAdapter();
+        progress = new ProgressDialog(this);
         mainAdapter.setContext(this);
         dataManager = new DataManager();
         mainPresenter = new MainPresenter(dataManager, this);
@@ -48,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
         handleIntent(getIntent());
         setUpRecyclerView();
         mainPresenter.loadFromDatabase();
+
+        if (!isConnected()){
+            Toast.makeText(this, "No Internet connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -95,6 +104,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            progress.setIndeterminate(true);
+            progress.setMessage(getString(R.string.loadingsearch));
+            progress.show();
             mainPresenter.loadPost(query);
         }
     }
@@ -108,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     @Override
     public void showComplete() {
         Toast.makeText(this, "Completed loading", Toast.LENGTH_SHORT).show();
+        progress.dismiss();
     }
 
     @Override
@@ -150,5 +163,14 @@ public class MainActivity extends AppCompatActivity implements RecyclerItemClick
     protected void onResume() {
         super.onResume();
         mainPresenter.loadFromDatabase();
+    }
+
+    public boolean isConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        if (activeNetworkInfo != null)
+            return activeNetworkInfo.isConnected();
+        else
+            return false;
     }
 }

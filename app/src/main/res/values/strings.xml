@@ -2,4 +2,7 @@
     <string name="app_name">GithubExplorer</string>
     <string name="action_settings">Settings</string>
     <string name="search_hint">Search User</string>
+    <string name="loadingdatabase">Loading previous visited users</string>
+    <string name="loadingsearch">searching ...</string>
+    <string name="loadingrepositories">Loading Repositories ...</string>
 </resources>
